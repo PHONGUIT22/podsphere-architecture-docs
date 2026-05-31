@@ -1,4 +1,4 @@
-# 🌙 Hearo Astrology Gateway (Node.js Math Engine)
+# 🌙 Podsphere Astrology Gateway (Node.js Math Engine)
 
 Welcome to the **Astrology Mathematical Gateway** documentation. Built with **Node.js (v22) and Express.js**, this high-throughput microservice acts as the deterministic computational backbone of the PodSphere ecosystem. It isolates heavy mathematical modeling, Solar/Lunar calendar conversions, and I-Ching (Kinh Dịch) combinatorial logic from the main .NET business layer.
 
