@@ -1,147 +1,83 @@
-# Hearo Backend Architecture & Workflow Documentation
+# 🌌 PodSphere Polyglot Microservices Ecosystem
 
-Welcome to the **Hearo Backend** repository documentation. This project is built using **.NET 8** following the **Clean Architecture** paradigm. It acts as the core engine for an AI-powered social podcast and metaphysics platform, orchestrating heavy AI jobs, automated payment scanning, media content streaming, and complex astrological data handling.
+Welcome to the ultimate architectural and technical specification registry for the **PodSphere Backend Ecosystem**.
 
----
-
-## 🏗️ 1. Architecture Overview
-
-The system strictly decouples concerns into four concentric layers to maintain high testability, scalability, and independence from external frameworks:
-
-1. **Domain:** Enterprise core business models, entities, and enums (e.g., `User`, `AstrologyProfile`, `Podcast`, `Meditation`).
-2. **Application:** System workflows, repository interfaces, and core DTOs/use cases.
-3. **Infrastructure:** External integrations, persistence logic (`HearoDbContext`), cloud storage (`S3StorageService`), authentication (`JwtTokenGenerator`), and background queue processors.
-4. **WebAPI (Presentation):** REST Controllers, API routing, custom middleware, and rate-limiting enforcement.
+PodSphere is an advanced, high-performance, AI-powered social podcast and metaphysical analysis platform. Due to the intellectual property and proprietary nature of the production source code, this repository acts as an exhaustive **Technical Showcase** mapped out to demonstrate system design patterns, distributed microservices communications, multi-language integration, and complex algorithmic processing pipelines.
 
 ---
 
-## 🔄 2. Core System Workflows (System Luồng)
+## 🏗️ 1. Global Architecture Mapping
 
-### 2.1. Throttled AI Astrology & Divination Processing Flow
-To safeguard the system's performance and prevent hitting external API rate limits (e.g., Google Gemini / CrewAI limits), AI processing utilizes an **in-memory Bounded Channel Queue** coupled with a semaphore-throttled background worker.
+The ecosystem operates on a **Polyglot Microservices Design**, deliberately selecting the optimal programming language and runtime framework for distinct computational domains:
 
-```
- [Client Request] 
-        │
-        ▼ (Controller)
- [Enqueue Job into Bounded Channel] ──► (Cap: 1000 messages, non-blocking Producer)
-        │
-        ▼
- [AiJobQueue (In-Memory Queue)]
-        │
-        ▼ (Consumer loop picks up job immediately)
- [AiWorkerService] ──► [Task.Run (Fire-and-Forget Thread)]
-                             │
-                             ▼
-                     [SemaphoreSlim(3)] ──► Max 3 concurrent jobs running
-                             │
-                             ▼
-                  [Call Python CrewAI Endpoint] ──► (Timeout: 3 mins, takes 20-40s)
-                             │
-                             ▼ (On Success)
-                  ┌──────────┴──────────┐
-                  ▼                     ▼
-       [Update Database Entity]  [Deduct Wallet Balance]
-       (BaziChart / TuViChart /    (If user is not an Admin)
-        IChingDivination Text)          │
-                  │                     │
-                  └──────────┬──────────┘
-                             │
-                             ▼
-                 [Create In-App Notification]
-```
+```text
+                                    ┌───────────────────────────────────┐
+                                    │       Client Application          │
+                                    │      (Mobile iOS/Android)         │
+                                    └─────────────────┬─────────────────┘
+                                                      │
+                                                      │ HTTPS (REST / JWT Auth / Rate-Limited)
+                                                      ▼
+    ┌───────────────────────────────────────────────────────────────────────────────────────────────────┐
+    │                                   .NET 8 CORE API ENGINE [BFF & Core]                             │
+    │  - Business Domain Workflows    - Identity & Security (JWT/OAuth)   - Data Storage & S3 Management │
+    │  - Financial Transactions (Stripe) - Automated IMAP VietQR Scanning  - In-Memory Job Channels     │
+    └─────────────────┬───────────────────────────────────────────────┬─────────────────────────────────┘
+                      │                                               │
+                      │ Async Queue Processing                        │ Synchronous HTTP REST
+                      │ (Throttled by SemaphoreSlim)                  │ (Internal JSON Payload)
+                      ▼                                               ▼
+    ┌──────────────────────────────────────────────────┐    ┌──────────────────────────────────────────────────┐
+    │          PYTHON AI MICROSERVICE [Inference]      │    │         NODE.JS ASTROLOGY GATEWAY [Math]         │
+    │  - FastAPI Endpoints                             │    │  - Express.js Engine (v22 Runtime)               │
+    │  - CrewAI Multi-Agent Orchestration              │    │  - Lunar-JavaScript Calendar Transformations      │
+    │  - Google Gemini Flash Semantic Analysis         │◄───┤  - Deterministic BaZi & I-Ching Combo Math       │
+    └─────────────────┬────────────────────────────────┘    │  - Outbound Interceptor (Na-Yin Correction)      │
+                      │                                     └──────────────────────────────────────────────────┘
+                      │ Read Live Context
+                      ▼
+    ┌──────────────────────────────────────────────────┐
+    │           FIREBASE REALTIME DATABASE             │
+    │  - Synchronized User Mental State / Health Logs  │
+    └──────────────────────────────────────────────────┘
+Core Engineering Components.NET 8 Core API Engine (C#): Governs the overarching application context. It serves as the Backend-for-Frontend (BFF), securing endpoints, managing transactional continuity, persisting data via Entity Framework Core, and queuing asynchronous heavy processing.Python AI Microservice (Python): Operates exclusively as an isolated AI inference server. It encapsulates generative AI logic, utilizes multi-agent systems, and handles semantic generation using large language models (LLMs).Node.js Astrology Gateway (JavaScript): Operates as a deterministic mathematical calculation server, rendering high-speed, zero-hallucination astrological and calendar data transformations.📡 2. Inter-Service Communication MatrixThe three microservices communicate through a hybrid model combining Synchronous HTTP REST Protocols for immediate data fetching and Asynchronous Thread-Throttled Channels for heavy workloads.2.1. The Inter-Service Communication RegistrySource ServiceTarget ServiceProtocolPayload FormatCommunication PatternPurpose.NET CoreNode.js GatewayHTTP POST / GETApplication/JSONSynchronous (Blocking)Fetching deterministic BaZi charts and I-Ching coin-toss layouts..NET CorePython AI ServiceHTTP POSTApplication/JSONAsynchronous (Queued Producer)Offloading AI reading requests (TuVi, BaZi, IChing).Node.js GatewayPython AI ServiceHTTP GETApplication/JSONSynchronous InterceptorFetching raw insights and overwriting error-prone Na-Yin fields.Python AI ServiceFirebase RTDBNative SDKDocument/JSON StreamReal-time SynchronizationMerging live psychological states (stress/mood) into AI prompts.🔄 3. End-to-End Core Workflows (System Flowcharts)3.1. Asynchronous Throttled AI Reading FlowThis pipeline ensures that a sudden surge in consumer requests does not crash the internal resources or exceed Google Gemini API limits.Plaintext[Client App]             [.NET Controller]          [In-Memory Channel]         [AiWorkerService]        [Python FastAPI]
+     │                           │                           │                          │                        │
+     │─── POST /api/reading ────►│                           │                          │                        │
+     │                           │─── Enqueue Job Message ──►│                          │                        │
+     │◄── HTTP 202 Accepted ─────│                           │                          │                        │
+     │                           │                           │─── Dequeue (Task.Run) ──►│                        │
+     │                           │                           │                          │── Acquire Semaphore ──►│ (Slot 1 of 3)
+     │                           │                           │                          │─── POST /ai-reading ──►│
+     │                           │                           │                          │                        │─── Processing
+     │                           │                           │                          │◄── Return Markdown ────│    (20-40s)
+     │                           │                           │                          │── Release Semaphore ───│
+     │                           │                           │                          │                        │
+     │                           │◄─── Persist Data & Notif ────────────────────────────│                        │
+     │◄── Realtime Notification ─│                           │                          │                        │
+Ingress: Client requests an intensive AI Reading (e.g., Tử Vi, Bát Tự, Kinh Dịch).Decoupling: The .NET Controller instantly encapsulates metadata into an AiJobMessage, pushes it to an in-memory Channel<AiJobMessage> (bounded at 1000 items), and issues an immediate HTTP 202 Accepted back to the UI.Throttling Control: A C# background worker (AiWorkerService) drains the channel. Before making an outbound API call, it requests a token from a SemaphoreSlim(3) instance, ensuring a maximum of 3 concurrent AI requests execute simultaneously.Execution & Persistence: The Python microservice invokes its multi-agent orchestration layer, processes the text using Gemini, and returns the Markdown output. The .NET thread releases the semaphore slot, saves the text directly into the database via ExecuteUpdateAsync, and dispatches an in-app system notification to the client.3.2. Automated Bank Deposit Flow (VietQR Processing)An completely autonomous payment settlement layer removing manual verification errors.Plaintext[Bank System]              [Gmail Server]           [EmailScannerWorker]        [HearoDbContext]          [Client App]
+      │                           │                          │                          │                      │
+      │── Cash Deposit Email ────►│                          │                          │                      │
+      │                           │                          │─── Poll IMAP (15s) ─────►│                      │
+      │                           │                          │                          │                      │
+      │                           │                          │─── Regex Match Valid ───►│                      │
+      │                           │                          │─── Check Idempotency ──►│                      │
+      │                           │                          │    (Transaction ID)      │                      │
+      │                           │                          │                          │                      │
+      │                           │                          │─── ExecuteUpdateAsync ──►│                      │
+      │                           │                          │    (Credit WalletBalance)│                      │
+      │                           │                          │                          │                      │
+      │                           │                          │─── Add Success Payment ─►│                      │
+      │                           │                          │                          │◄── Pull New Wallet ──│
+Trigger: The consumer scans a dynamically generated VietQR code containing the transaction string format BILL [USER_CODE]. The bank fires an transaction confirmation email to the platform's mailbox.Scanning Loop: The .NET EmailScannerWorker queries imap.gmail.com using a 15-second delay circuit-breaker. It filters for unread messages sent specifically by the bank's official address.Data Extraction & Anti-Fraud: The worker utilizes strict Regular Expressions (\+([\d,\.]+) VND and BILL ([A-Z0-9]{8,12})) to parse the financial value and targeting code. It maps the parsed ID into a string format MAIL_{unique_email_uid} and verifies it against the Payment unique constraints to maintain idempotency and block duplicate injection attacks.Settlement: The wallet balance is programmatically credited using EF Core's database engine, ensuring real-time transaction finality.3.3. The Data Sanitization Interceptor PipelineAn architecture designed to enforce 100% accurate data payloads before business state tracking occurs.Plaintext[.NET Core Engine]              [Node.js Gateway]              [Python AI Engine]              [Database]
+        │                               │                               │                           │
+        │─── HTTP GET /astrology/info ─►│                               │                           │
+        │                               │── Outbound Gateway Request ──►│                           │
+        │                               │                               │── (Fetch Raw Logic)       │
+        │                               │◄── Returns Payload Json ──────│                           │
+        │                               │                                                           │
+        │                               │─── [Calculates Na-Yin]                                    │
+        │                               │─── [Overwrites Errors via NAP_AM_MAP]                     │
+        │                               │                                                           │
+        │◄── Returns Sanitized JSON ────│                                                           │
 
-#### Detailed Flow Steps:
-1. **Initiation:** The client requests an astrological reading (Bát Tự, Tử Vi) or gieo quẻ (IChing Divination).
-2. **Buffering:** The controller builds an `AiJobMessage` containing user context, metadata, and cost pricing, pushing it to the `AiJobQueue`.
-3. **Throttling Strategy:** The `AiWorkerService` pulls the message from the channel. It spawns a decoupled task governed by a `SemaphoreSlim(3)`. This limits maximum concurrency to 3 parallel requests, protecting core server resources.
-4. **AI Generation:** The worker uses an optimized `HttpClient` configured with a 3-minute timeout to make a POST request to the Python CrewAI microservice endpoints (`/api/tuvi-reading`, `/api/iching-reading`, or `/api/ai-reading`) passing along the requested persona configurations (*e.g., traditional, GenZ*).
-5. **State Finalization:**
-   * **Success:** It saves the resulting Markdown response into the targeted table (`BaziChart.AiReadingText` or `IChingDivinations.AiReadingText`), subtracts the service fee from the `User.WalletBalance`, and publishes an instant success notification.
-   * **Failure:** It logs the failure stack trace, alerts the user via notifications that the transaction was canceled safely, and guarantees **zero balance deduction**.
-
----
-
-### 2.2. Automated Bank Email Deposit Flow (VietQR Automation)
-Instead of relying entirely on heavy third-party webhooks, the infrastructure provides an asynchronous, direct **IMAP Email Scanner Worker** that automates balance top-ups by reading encrypted official transaction alerts.
-
-```
-       [IMAP Connection] ──► Every 15 seconds to imap.gmail.com
-              │
-              ▼
-    [Filter Unseen Emails] ──► Matches Bank Address (e.g., Vietcombank)
-              │
-              ▼
-     [Regex Extraction] 
-     ├── Amount:  @"\+([\d,\.]+) VND"
-     └── Bill ID: @"BILL ([A-Z0-9]{8,12})"
-              │
-              ▼
-  [Idempotency & Anti-Fraud Check] ──► Verifies if Transaction ID "MAIL_{id}" already exists
-              │
-              ▼ (If Unique)
-   [Credit User Balance] ──► Matches Bill code prefix to User UUID
-              │
-              ▼
-   [Mark Email as SEEN]  ──► Ensures zero double-processing loops
-```
-
-#### Key Implementation Logic:
-* **Security:** The transaction process is securely bound to an asynchronous database execution context (`ExecuteUpdateAsync`).
-* **Idempotency Safeguard:** To prevent race conditions or duplicate top-up attacks if an email is parsed twice, a unique constraint is validated on the database index of the `Payment` table.
-
----
-
-### 2.3. S3 / Cloudflare R2 Media Management Flow
-Streaming static audio files for podcast episodes and guided meditations demands exceptional throughput and cloud-storage cost efficiency.
-
-```
- [File Stream Input] ──► [S3StorageService]
-                                │
-                                ▼
-                   [TransferUtilityUploadRequest]
-                                │
-                                ▼ (Crucial Performance Flag)
-                   [DisablePayloadSigning = true] ──► Bypasses AWS checksum calculation
-                                │                     Optimized specifically for Cloudflare R2
-                                ▼
-                   [Return Signed CDN Public URL] ──► Format: {PublicUrl}/{FileName}
-```
-
----
-
-## 🗄️ 3. Database Schema & Complex Relations
-
-The data persistence design leverages **Entity Framework Core Fluent API Configurations** inside `HearoDbContext` to control advanced relationships, custom constraints, and custom table performance indexing:
-
-### 3.1. Cascading & Cyclic Delete Restrictions
-To prevent default SQL Server cyclical reference errors during deletion cascades, specific relationships are governed by custom delete boundaries:
-* **Comment Tree Hierarchy:** The `Comment` entity uses a recursive self-referencing hierarchy (`ParentCommentId` mapped to `Replies`). Deleted parent entries are restricted via `DeleteBehavior.Restrict` to protect sub-threads.
-* **Social Reactions:** `CommentReaction` connects both `Comment` and `User`. The user path is configured with `DeleteBehavior.Restrict` to break cyclical delete loops.
-* **Astrology Profiles:** `User` has a 1-N relationship with `AstrologyProfile`. Deleting a user account cleanly cascades (`DeleteBehavior.Cascade`) to erase all personal sub-charts (`TuViChart`, `BaziChart`) to respect absolute data privacy.
-* **Astrology Daily Insights:** If an administrative operator deletes a `Podcast` or a `Meditation` that happened to be dynamically linked to a user's daily lucky recommendation block (`DailyAstrologyInsight`), the link smoothly drops to `NULL` via `DeleteBehavior.SetNull`, preventing crash errors.
-
-### 3.2. Precision & Index Mapping Optimizations
-* **Financial Data Security:** Every entity handling currency data (`Course.Price`, `Course.SalePrice`, `Payment.Amount`, `User.WalletBalance`) is strictly mapped to `decimal(18,2)` to eliminate floating-point rounding discrepancies.
-* **Performance Query Indexing:** High-traffic foreign keys and lookup parameters are optimized via composite database indices:
-  * Unique index on `Payment.TransactionId` to enforce strict payment integrity.
-  * Unique index on `Blog.Slug` and `User.Email`.
-  * Composite index on `AstrologyProfile` (`UserId`, `IsPrimaryProfile`) for lightning-fast profile switching.
-  * Composite index on `Subscription` (`UserId`, `EndDate`) to optimize rapid real-time VIP membership authorization middleware.
-
----
-
-## 🚀 4. Seeding Specifications (Core Media Content)
-Upon database creation (`DbInitializer.Seed`), the backend instantiates default technical categories, administrative accounts, and populates **6 core targeted meditation sessions**:
-
-| Title | Target Category | Audio URL Type | Core Purpose Description |
-| :--- | :--- | :--- | :--- |
-| **3 Phút Hạ Nhiệt Stress** | Quick | SoundHelix Streaming MP3 | Instant emergency calming during heavy project deadlines or academic pressure. |
-| **Hít Thở Tỉnh Thức** | Quick | SoundHelix Streaming MP3 | Breath focus adjustment exercises tailored before intensive programming blocks. |
-| **Chữa Lành Nội Tâm** | Deep | SoundHelix Streaming MP3 | 432Hz deep frequency structural therapy session mapping emotional stability. |
-| **Mưa Đêm Trên Mái Tôn** | Sleep | SoundHelix Streaming MP3 | High-fidelity environmental noise mapping designed to improve REM cycles. |
-| **Tiếng Sóng Biển Rì Rào** | Sleep | SoundHelix Streaming MP3 | Extended ocean soundscapes to handle extreme insomnia. |
-| **Tư Duy Alpha Siêu Cấp** | Focus | SoundHelix Streaming MP3 | Alpha wave brainwave manipulation to boost cognitive synthesis and study focus. |
-
----
-*Documentation Compiled & Validated for the Hearo .NET Ecosystem Deployment Framework.*
+🧮 4. Algorithmic Domain BreakdownThe system incorporates several complex computational models to ensure data validity across the microservices:4.1. The Modulo Modulating Model (Plum Blossom / Mai Hoa Dịch Số)The Node.js gateway calculates Hexagram indexing numbers programmatically without relying on structural static arrays. It applies modular arithmetic directly on targeted timestamp clusters:$$\text{UpperTrigram} = \left( \sum \text{Lunar Year} + \text{Lunar Month} + \text{Lunar Day} \right) \pmod 8$$$$\text{LowerTrigram} = \left( \sum \text{Lunar Year} + \text{Lunar Month} + \text{Lunar Day} + \text{Lunar Hour Branch} \right) \pmod 8$$$$\text{MovingLine (Hào Động)} = \left( \sum \text{Lunar Year} + \text{Lunar Month} + \text{Lunar Day} + \text{Lunar Hour Branch} \right) \pmod 6$$4.2. Ten Gods (Thập Thần) Assignment Mapping MatrixThe Node.js microservice instantiates an explicit mapping array evaluating the polarity relationship between the Day Master Heavenly Stem ($DM$) and all surrounding elements ($E$):$$\text{Relationship Matrix} = f(Stem_{DM} \times Stem_{E})$$This dynamically evaluates factors such as Generation (Sinh), Control (Khắc), and Polarity Alignment (Same Polarity = Biến Thể / Opposite Polarity = Chính Thể) to generate variables like Thương Quan versus Thực Thần.4.3. High-Traffic Database Constraints OptimizationTo ensure optimal query performance under high load, the relational schema enforces advanced database indexing configurations:VIP Authorization Loop: Subscription maintains a composite index on [UserId, EndDate], allowing the authentication middleware to determine premium access eligibility in $O(1)$ time.Cyclic Delete Mitigation: Recursive relationships within the Comment entity (Replies map back to ParentCommentId) are explicitly configured with DeleteBehavior.Restrict to prevent SQL Server cascade replication lockups.Verified Deployment Blueprint for the PodSphere Distributed Core Infrastructure Framework.
