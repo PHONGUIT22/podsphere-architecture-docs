@@ -132,14 +132,14 @@ The system incorporates several complex computational models to ensure data vali
 ### 4.1. The Modulo Modulating Model (Plum Blossom / Mai Hoa Dịch Số)
 The Node.js gateway calculates Hexagram indexing numbers programmatically without relying on structural static arrays. It applies modular arithmetic directly on targeted timestamp clusters:
 
-$$	ext{UpperTrigram} = \left( \sum 	ext{Lunar Year} + 	ext{Lunar Month} + 	ext{Lunar Day} 
-ight) \pmod 8$$
+**Upper Trigram (Ngoại Quái):**
+$$UpperTrigram = (\sum LunarYear + LunarMonth + LunarDay) \pmod 8$$
 
-$$	ext{LowerTrigram} = \left( \sum 	ext{Lunar Year} + 	ext{Lunar Month} + 	ext{Lunar Day} + 	ext{Lunar Hour Branch} 
-ight) \pmod 8$$
+**Lower Trigram (Nội Quái):**
+$$LowerTrigram = (\sum LunarYear + LunarMonth + LunarDay + LunarHour) \pmod 8$$
 
-$$	ext{MovingLine (Hào Động)} = \left( \sum 	ext{Lunar Year} + 	ext{Lunar Month} + 	ext{Lunar Day} + 	ext{Lunar Hour Branch} 
-ight) \pmod 6$$
+**Moving Line (Hào Động):**
+$$MovingLine = (\sum LunarYear + LunarMonth + LunarDay + LunarHour) \pmod 6$$
 
 ### 4.2. Ten Gods (Thập Thần) Assignment Mapping Matrix
 The Node.js microservice instantiates an explicit mapping array evaluating the polarity relationship between the Day Master Heavenly Stem ($DM$) and all surrounding elements ($E$):
