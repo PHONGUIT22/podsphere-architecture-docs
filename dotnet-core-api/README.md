@@ -1,6 +1,6 @@
-# Hearo Backend Architecture & Workflow Documentation
+# Podsphere Backend Architecture & Workflow Documentation
 
-Welcome to the **Hearo Backend** repository documentation. This project is built using **.NET 8** following the **Clean Architecture** paradigm. It acts as the core engine for an AI-powered social podcast and metaphysics platform, orchestrating heavy AI jobs, automated payment scanning, media content streaming, and complex astrological data handling.
+Welcome to the **Podsphere Backend** repository documentation. This project is built using **.NET 8** following the **Clean Architecture** paradigm. It acts as the core engine for an AI-powered social podcast and metaphysics platform, orchestrating heavy AI jobs, automated payment scanning, media content streaming, and complex astrological data handling.
 
 ---
 
@@ -10,7 +10,7 @@ The system strictly decouples concerns into four concentric layers to maintain h
 
 1. **Domain:** Enterprise core business models, entities, and enums (e.g., `User`, `AstrologyProfile`, `Podcast`, `Meditation`).
 2. **Application:** System workflows, repository interfaces, and core DTOs/use cases.
-3. **Infrastructure:** External integrations, persistence logic (`HearoDbContext`), cloud storage (`S3StorageService`), authentication (`JwtTokenGenerator`), and background queue processors.
+3. **Infrastructure:** External integrations, persistence logic (`PodsphereDbContext`), cloud storage (`S3StorageService`), authentication (`JwtTokenGenerator`), and background queue processors.
 4. **WebAPI (Presentation):** REST Controllers, API routing, custom middleware, and rate-limiting enforcement.
 
 ---
@@ -112,7 +112,7 @@ Streaming static audio files for podcast episodes and guided meditations demands
 
 ## 🗄️ 3. Database Schema & Complex Relations
 
-The data persistence design leverages **Entity Framework Core Fluent API Configurations** inside `HearoDbContext` to control advanced relationships, custom constraints, and custom table performance indexing:
+The data persistence design leverages **Entity Framework Core Fluent API Configurations** inside `PodsphereDbContext` to control advanced relationships, custom constraints, and custom table performance indexing:
 
 ### 3.1. Cascading & Cyclic Delete Restrictions
 To prevent default SQL Server cyclical reference errors during deletion cascades, specific relationships are governed by custom delete boundaries:
@@ -144,4 +144,4 @@ Upon database creation (`DbInitializer.Seed`), the backend instantiates default 
 | **Tư Duy Alpha Siêu Cấp** | Focus | SoundHelix Streaming MP3 | Alpha wave brainwave manipulation to boost cognitive synthesis and study focus. |
 
 ---
-*Documentation Compiled & Validated for the Hearo .NET Ecosystem Deployment Framework.*
+*Documentation Compiled & Validated for the Podsphere .NET Ecosystem Deployment Framework.*
