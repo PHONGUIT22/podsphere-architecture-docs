@@ -90,7 +90,7 @@ This pipeline ensures that a sudden surge in consumer requests does not crash th
 An completely autonomous payment settlement layer removing manual verification errors.
 
 ```text
-[Bank System]              [Gmail Server]           [EmailScannerWorker]        [HearoDbContext]          [Client App]
+[Bank System]              [Gmail Server]           [EmailScannerWorker]        [PodsphereDbContext]          [Client App]
       │                           │                          │                          │                      │
       │── Cash Deposit Email ────►│                          │                          │                      │
       │                           │                          │─── Poll IMAP (15s) ─────►│                      │
