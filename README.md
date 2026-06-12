@@ -134,20 +134,16 @@ The system incorporates several complex computational models to ensure data vali
 ### 4.1. The Modulo Modulating Model (Plum Blossom / Mai Hoa Dịch Số)
 The Node.js gateway calculates Hexagram indexing numbers programmatically without relying on structural static arrays. It applies modular arithmetic directly on targeted timestamp clusters:
 
-$$	ext{UpperTrigram} = \left( \sum 	ext{Lunar Year} + 	ext{Lunar Month} + 	ext{Lunar Day} 
-ight) \pmod 8$$
+**Upper Trigram (Ngoại Quái):** UpperTrigram=(∑LunarYear+LunarMonth+LunarDay)(mod8)
 
-$$	ext{LowerTrigram} = \left( \sum 	ext{Lunar Year} + 	ext{Lunar Month} + 	ext{Lunar Day} + 	ext{Lunar Hour Branch} 
-ight) \pmod 8$$
+**Lower Trigram (Nội Quái):** LowerTrigram=(∑LunarYear+LunarMonth+LunarDay+LunarHour)(mod8)
 
-$$	ext{MovingLine (Hào Động)} = \left( \sum 	ext{Lunar Year} + 	ext{Lunar Month} + 	ext{Lunar Day} + 	ext{Lunar Hour Branch} 
-ight) \pmod 6$$
+**Moving Line (Hào Động):** MovingLine=(∑LunarYear+LunarMonth+LunarDay+LunarHour)(mod6)
 
 ### 4.2. Ten Gods (Thập Thần) Assignment Mapping Matrix
 The Node.js microservice instantiates an explicit mapping array evaluating the polarity relationship between the Day Master Heavenly Stem ($DM$) and all surrounding elements ($E$):
 
-$$	ext{Relationship Matrix} = f(Stem_{DM} \times Stem_{E})$$
-
+extRelationshipMatrix=f(StemDM×StemE)
 This dynamically evaluates factors such as Generation (Sinh), Control (Khắc), and Polarity Alignment (Same Polarity = Biến Thể / Opposite Polarity = Chính Thể) to generate variables like *Thương Quan* versus *Thực Thần*.
 
 ### 4.3. High-Traffic Database Constraints Optimization
