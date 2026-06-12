@@ -11,35 +11,37 @@ PodSphere is an advanced, high-performance, AI-powered social podcast and metaph
 The ecosystem operates on a **Polyglot Microservices Design**, deliberately selecting the optimal programming language and runtime framework for distinct computational domains:
 
 ```text
-                                    ┌───────────────────────────────────┐
-                                    │       Client Application          │
-                                    │      (Mobile iOS/Android)         │
-                                    └─────────────────┬─────────────────┘
-                                                      │
-                                                      │ HTTPS (REST / JWT Auth / Rate-Limited)
-                                                      ▼
-    ┌───────────────────────────────────────────────────────────────────────────────────────────────────┐
-    │                                   .NET 8 CORE API ENGINE [BFF & Core]                             │
-    │  - Business Domain Workflows    - Identity & Security (JWT/OAuth)   - Data Storage & S3 Management │
-    │  - Financial Transactions (Stripe) - Automated IMAP VietQR Scanning  - In-Memory Job Channels     │
-    └─────────────────┬───────────────────────────────────────────────┬─────────────────────────────────┘
-                      │                                               │
-                      │ Async Queue Processing                        │ Synchronous HTTP REST
-                      │ (Throttled by SemaphoreSlim)                  │ (Internal JSON Payload)
-                      ▼                                               ▼
-    ┌──────────────────────────────────────────────────┐    ┌──────────────────────────────────────────────────┐
-    │          PYTHON AI MICROSERVICE [Inference]      │    │         NODE.JS ASTROLOGY GATEWAY [Math]         │
-    │  - FastAPI Endpoints                             │    │  - Express.js Engine (v22 Runtime)               │
-    │  - CrewAI Multi-Agent Orchestration              │    │  - Lunar-JavaScript Calendar Transformations      │
-    │  - Google Gemini Flash Semantic Analysis         │◄───┤  - Deterministic BaZi & I-Ching Combo Math       │
-    └─────────────────┬────────────────────────────────┘    │  - Outbound Interceptor (Na-Yin Correction)      │
-                      │                                     └──────────────────────────────────────────────────┘
+                               ┌───────────────────────────────────┐
+                               │        Client Application         │
+                               │       (Mobile iOS/Android)        │
+                               └─────────────────┬─────────────────┘
+                                                 │
+                                                 │ HTTPS (REST / JWT Auth / Rate-Limited)
+                                                 ▼
+    ┌─────────────────────────────────────────────────────────────────────────────────────┐
+    │                        .NET 8 CORE API ENGINE [BFF & Core]                          │
+    │  - Workflows | Identity & Security (JWT/OAuth) | Data Storage & S3 Management       │
+    │  - Financial Transactions (Stripe) | Automated IMAP VietQR | In-Memory Job Channels │
+    └─────────────────┬─────────────────────────────────────────┬─────────────────────────┘
+                      │                                         │
+                      │ Async Queue Processing                  │ Synchronous HTTP REST
+                      │ (Throttled by SemaphoreSlim)            │ (Internal JSON Payload)
+                      ▼                                         ▼
+    ┌───────────────────────────────────┐     ┌───────────────────────────────────┐
+    │     PYTHON AI MICROSERVICE        │     │     NODE.JS ASTROLOGY GATEWAY     │
+    │          [Inference]              │     │              [Math]               │
+    │ - FastAPI | CrewAI Orchestration  │     │ - Express.js (v22) | Lunar-JS     │
+    │ - Gemini Flash Semantic Analysis  │◄────┤ - BaZi & I-Ching Combo Math       │
+    │                                   │     │ - Outbound Interceptor (Na-Yin)   │
+    └─────────────────┬─────────────────┘     └───────────────────────────────────┘
+                      │
                       │ Read Live Context
                       ▼
-    ┌──────────────────────────────────────────────────┐
-    │           FIREBASE REALTIME DATABASE             │
-    │  - Synchronized User Mental State / Health Logs  │
-    └──────────────────────────────────────────────────┘
+    ┌───────────────────────────────────┐
+    │    FIREBASE REALTIME DATABASE     │
+    │ - Synchronized User Mental State  │
+    │ - Health Logs                     │
+    └───────────────────────────────────┘
 ```
 
 ### Core Engineering Components
