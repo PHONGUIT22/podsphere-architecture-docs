@@ -11,37 +11,36 @@ PodSphere is an advanced, high-performance, AI-powered social podcast and metaph
 The ecosystem operates on a **Polyglot Microservices Design**, deliberately selecting the optimal programming language and runtime framework for distinct computational domains:
 
 ```text
-┌───────────────────────────────────┐
-                               │        Client Application         │
-                               │       (Mobile iOS/Android)        │
-                               └─────────────────┬─────────────────┘
-                                                 │
-                                                 │ HTTPS (REST / JWT Auth / Rate-Limited)
-                                                 ▼
-    ┌─────────────────────────────────────────────────────────────────────────────────────┐
-    │                        .NET 8 CORE API ENGINE [BFF & Core]                          │
-    │  - Workflows | Identity & Security (JWT/OAuth) | Data Storage & S3 Management       │
-    │  - Financial Transactions (Stripe) | Automated IMAP VietQR | In-Memory Job Channels │
-    └─────────────────┬─────────────────────────────────────────┬─────────────────────────┘
-                      │                                         │
-                      │ Async Queue Processing                  │ Synchronous HTTP REST
-                      │ (Throttled by SemaphoreSlim)            │ (Internal JSON Payload)
-                      ▼                                         ▼
-    ┌───────────────────────────────────┐     ┌───────────────────────────────────┐
-    │     PYTHON AI MICROSERVICE        │     │     NODE.JS ASTROLOGY GATEWAY     │
-    │          [Inference]              │     │              [Math]               │
-    │ - FastAPI | CrewAI Orchestration  │     │ - Express.js (v22) | Lunar-JS     │
-    │ - Gemini Flash Semantic Analysis  │◄────┤ - BaZi & I-Ching Combo Math       │
-    │                                   │     │ - Outbound Interceptor (Na-Yin)   │
-    └─────────────────┬─────────────────┘     └───────────────────────────────────┘
-                      │
+                                    ┌───────────────────────────────────┐
+                                    │       Client Application          │
+                                    │      (Mobile iOS/Android)         │
+                                    └─────────────────┬─────────────────┘
+                                                      │
+                                                      │ HTTPS (REST / JWT Auth / Rate-Limited)
+                                                      ▼
+    ┌───────────────────────────────────────────────────────────────────────────────────────────────────┐
+    │                                   .NET 8 CORE API ENGINE [BFF & Core]                             │
+    │  - Business Domain Workflows    - Identity & Security (JWT/OAuth)   - Data Storage & S3 Management │
+    │  - Financial Transactions (Stripe) - Automated IMAP VietQR Scanning  - In-Memory Job Channels     │
+    └─────────────────┬───────────────────────────────────────────────┬─────────────────────────────────┘
+                      │                                               │
+                      │ Async Queue Processing                        │ Synchronous HTTP REST
+                      │ (Throttled by SemaphoreSlim)                  │ (Internal JSON Payload)
+                      ▼                                               ▼
+    ┌──────────────────────────────────────────────────┐    ┌──────────────────────────────────────────────────┐
+    │          PYTHON AI MICROSERVICE [Inference]      │    │         NODE.JS ASTROLOGY GATEWAY [Math]         │
+    │  - FastAPI Endpoints                             │    │  - Express.js Engine (v22 Runtime)               │
+    │  - CrewAI Multi-Agent Orchestration              │    │  - Lunar-JavaScript Calendar Transformations      │
+    │  - Google Gemini Flash Semantic Analysis         │◄───┤  - Deterministic BaZi & I-Ching Combo Math       │
+    └─────────────────┬────────────────────────────────┘    │  - Outbound Interceptor (Na-Yin Correction)      │
+                      │                                     └──────────────────────────────────────────────────┘
                       │ Read Live Context
                       ▼
-    ┌───────────────────────────────────┐
-    │    FIREBASE REALTIME DATABASE     │
-    │ - Synchronized User Mental State  │
-    │ - Health Logs                     │
-    └───────────────────────────────────┘
+    ┌──────────────────────────────────────────────────┐
+    │           FIREBASE REALTIME DATABASE             │
+    │  - Synchronized User Mental State / Health Logs  │
+    └──────────────────────────────────────────────────┘
+```
 
 ### Core Engineering Components
 1. **[.NET 8 Core API Engine (C#)](./dotnet-core-api/):** Governs the overarching application context. It serves as the Backend-for-Frontend (BFF), securing endpoints, managing transactional continuity, persisting data via Entity Framework Core, and queuing asynchronous heavy processing.
@@ -91,7 +90,7 @@ This pipeline ensures that a sudden surge in consumer requests does not crash th
 An completely autonomous payment settlement layer removing manual verification errors.
 
 ```text
-[Bank System]              [Gmail Server]           [EmailScannerWorker]        [PodsphereDbContext]          [Client App]
+[Bank System]              [Gmail Server]           [EmailScannerWorker]        [HearoDbContext]          [Client App]
       │                           │                          │                          │                      │
       │── Cash Deposit Email ────►│                          │                          │                      │
       │                           │                          │─── Poll IMAP (15s) ─────►│                      │
@@ -133,14 +132,14 @@ The system incorporates several complex computational models to ensure data vali
 ### 4.1. The Modulo Modulating Model (Plum Blossom / Mai Hoa Dịch Số)
 The Node.js gateway calculates Hexagram indexing numbers programmatically without relying on structural static arrays. It applies modular arithmetic directly on targeted timestamp clusters:
 
-**Upper Trigram (Ngoại Quái):**
-$$UpperTrigram = (\sum LunarYear + LunarMonth + LunarDay) \pmod 8$$
+$$	ext{UpperTrigram} = \left( \sum 	ext{Lunar Year} + 	ext{Lunar Month} + 	ext{Lunar Day} 
+ight) \pmod 8$$
 
-**Lower Trigram (Nội Quái):**
-$$LowerTrigram = (\sum LunarYear + LunarMonth + LunarDay + LunarHour) \pmod 8$$
+$$	ext{LowerTrigram} = \left( \sum 	ext{Lunar Year} + 	ext{Lunar Month} + 	ext{Lunar Day} + 	ext{Lunar Hour Branch} 
+ight) \pmod 8$$
 
-**Moving Line (Hào Động):**
-$$MovingLine = (\sum LunarYear + LunarMonth + LunarDay + LunarHour) \pmod 6$$
+$$	ext{MovingLine (Hào Động)} = \left( \sum 	ext{Lunar Year} + 	ext{Lunar Month} + 	ext{Lunar Day} + 	ext{Lunar Hour Branch} 
+ight) \pmod 6$$
 
 ### 4.2. Ten Gods (Thập Thần) Assignment Mapping Matrix
 The Node.js microservice instantiates an explicit mapping array evaluating the polarity relationship between the Day Master Heavenly Stem ($DM$) and all surrounding elements ($E$):
